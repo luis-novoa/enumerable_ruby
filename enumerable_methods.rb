@@ -39,7 +39,7 @@ module Enumerable
   def my_all?(type = nil)
     instance = self
     result = true
-    if !(type.nil?)
+    if !type.nil?
       puts "warning: given block not used" if block_given?
       instance.my_each do |e|
         unless e == type || e.match(type) || e.class == type
@@ -64,7 +64,7 @@ module Enumerable
   def my_any?
     instance = self
     result = false
-    if !(type.nil?)
+    if !type.nil?
       puts "warning: given block not used" if block_given?
       instance.my_each do |e|
         if e == type || e.match(type) || e.class == type
@@ -89,7 +89,7 @@ module Enumerable
   def my_none?
     instance = self
     result = true
-    if !(type.nil?)
+    if !type.nil?
       puts "warning: given block not used" if block_given?
       instance.my_each do |e|
         if e == type || e.match(type) || e.class == type
@@ -113,7 +113,7 @@ module Enumerable
 
   def my_count(arg = nil)
     instance = self
-    if !(arg.nil?)
+    if !arg.nil?
       count = 0
       puts "warning: given block not used" if block_given?
       instance.my_each do |e|
@@ -142,6 +142,8 @@ module Enumerable
 
   def my_inject(initial = nil, sym = nil)
     instance = self
+    total = initial
+    total = instance.shift if total.nil?
     operations = {
       :+ => Proc.new do |a, b| a + b end,
       :- => Proc.new do |a, b| a - b end,
@@ -149,12 +151,7 @@ module Enumerable
       :/ => Proc.new do |a, b| a / b end,
       :** => Proc.new do |a, b| a ** b end
     }
-    if initial.nil?
-      total = instance.shift
-    else
-      total = initial
-    end
-    if !(sym.nil?)
+    if !sym.nil?
       instance.each do |e|
         total = operations[sym].call(total, e)
       end
@@ -206,3 +203,8 @@ module Enumerable
     end
   end
 end
+
+var = [1, 4, 3, 4]
+inst = Proc.new do |e| e += 1 end
+test = var.my_inject(:**)
+puts test
