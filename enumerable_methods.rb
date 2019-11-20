@@ -15,4 +15,13 @@ module Enumerable
       yield(instance[i], i)
     end
   end
+
+  def my_select
+    instance = self
+    result = []
+    instance.my_each do |e|
+      result.push(e) if yield(e)
+    end
+    result
+  end
 end
