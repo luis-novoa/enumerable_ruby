@@ -36,10 +36,18 @@ module Enumerable
     end
   end
 
-  def my_all?
+  def my_all?(type = nil)
     instance = self
     result = true
-    if block_given?
+    if !(type.nil?)
+      instance.my_each do |e|
+        unless e.class == type
+          result = false
+          break
+        end
+      end
+      result
+    elsif block_given?
       instance.my_each do |e|
         unless yield(e)
           result = false
@@ -158,5 +166,8 @@ module Enumerable
 end
 
 var = [1, 2, 3, 4]
-test = var.my_each
+inst = Proc.new do |e| e += 1 end
+test = var.my_all?(Integer) do |e|
+  e > 0
+end
 puts test
