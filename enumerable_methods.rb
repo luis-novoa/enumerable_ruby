@@ -64,7 +64,16 @@ module Enumerable
   def my_any?
     instance = self
     result = false
-    if block_given?
+    if !(type.nil?)
+      puts "warning: given block not used" if block_given?
+      instance.my_each do |e|
+        unless e == type || e.match(type) || e.class == type
+          result = true
+          break
+        end
+      end
+      result
+    elsif block_given?
       instance.my_each do |e|
         if yield(e)
           result = true
