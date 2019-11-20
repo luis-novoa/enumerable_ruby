@@ -40,6 +40,7 @@ module Enumerable
     instance = self
     result = true
     if !(type.nil?)
+      puts "warning: given block not used" if block_given?
       instance.my_each do |e|
         unless e.class == type
           result = false
@@ -167,7 +168,7 @@ end
 
 var = [1, 2, 3, 4]
 inst = Proc.new do |e| e += 1 end
-test = var.my_all?(Integer) do |e|
+test = var.my_all?(String) do |e|
   e > 0
 end
 puts test
