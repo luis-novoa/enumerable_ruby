@@ -67,7 +67,7 @@ module Enumerable
     if !(type.nil?)
       puts "warning: given block not used" if block_given?
       instance.my_each do |e|
-        unless e == type || e.match(type) || e.class == type
+        if e == type || e.match(type) || e.class == type
           result = true
           break
         end
@@ -89,7 +89,16 @@ module Enumerable
   def my_none?
     instance = self
     result = true
-    if block_given?
+    if !(type.nil?)
+      puts "warning: given block not used" if block_given?
+      instance.my_each do |e|
+        if e == type || e.match(type) || e.class == type
+          result = false
+          break
+        end
+      end
+      result
+    elsif block_given?
       instance.my_each do |e|
         if yield(e)
           result = false
