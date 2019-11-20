@@ -111,9 +111,16 @@ module Enumerable
     end
   end
 
-  def my_count
+  def my_count(arg = nil)
     instance = self
-    if block_given?
+    if !(arg.nil?)
+      count = 0
+      puts "warning: given block not used" if block_given?
+      instance.my_each do |e|
+        count += 1 if e == arg
+      end
+      count
+    elsif block_given?
       instance.length
     else
       instance.to_enum
@@ -184,7 +191,7 @@ module Enumerable
   end
 end
 
-var = ["like", "unlike", :alike]
+var = [1, 4, 3, 4, "oi", "oi", "oi"]
 inst = Proc.new do |e| e += 1 end
-test = var.all?(/like/)
+test = var.count(/i/)
 puts test
