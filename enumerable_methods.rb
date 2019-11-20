@@ -197,7 +197,7 @@ end
 
 var = [1, 4, 3, 4]
 inst = Proc.new do |e| e += 1 end
-test = var.inject(2) do |sum, e|
+test = var.my_inject(2) do |sum, e|
   sum + e
 end
 puts test
