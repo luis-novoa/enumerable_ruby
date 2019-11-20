@@ -74,4 +74,13 @@ module Enumerable
     end
     result
   end
+
+  def my_inject
+    instance = self
+    total = instance.shift
+    instance.each do |e|
+      total = yield(total, e)
+    end
+    total
+  end
 end
