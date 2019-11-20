@@ -60,4 +60,9 @@ module Enumerable
     end
     result
   end
+
+  def my_count
+    instance = self
+    instance.length
+  end
 end
