@@ -24,4 +24,16 @@ module Enumerable
     end
     result
   end
+
+  def my_all?
+    instance = self
+    result = true
+    instance.my_each do |e|
+      unless yield(e)
+        result = false
+        break
+      end
+    end
+    result
+  end
 end
