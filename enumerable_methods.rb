@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-# rubocop:disable Style/CaseEquality
 
 module Enumerable
   def my_each
@@ -90,7 +89,6 @@ module Enumerable
       sum * e
     end
   end
-
 
   def my_map_proc(&proc)
     instance = self
