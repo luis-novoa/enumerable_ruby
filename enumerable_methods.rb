@@ -142,12 +142,24 @@ module Enumerable
 
   def my_inject(initial = nil, sym = nil)
     instance = self
+    operations = {
+      :+ => Proc.new do |a, b| a + b end,
+      :- => Proc.new do |a, b| a - b end,
+      :* => Proc.new do |a, b| a * b end,
+      :/ => Proc.new do |a, b| a / b end,
+      :** => Proc.new do |a, b| a ** b end
+    }
     if initial.nil?
       total = instance.shift
     else
       total = initial
     end
-    if block_given?
+    if !(sym.nil?)
+      instance.each do |e|
+        total = operations[sym].call(total, e)
+      end
+      total
+    elsif block_given?
       instance.each do |e|
         total = yield(total, e)
       end
@@ -194,10 +206,3 @@ module Enumerable
     end
   end
 end
-
-var = [1, 4, 3, 4]
-inst = Proc.new do |e| e += 1 end
-test = var.my_inject(2) do |sum, e|
-  sum + e
-end
-puts test
