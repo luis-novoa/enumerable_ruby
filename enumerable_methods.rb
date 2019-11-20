@@ -90,4 +90,14 @@ module Enumerable
       sum * e
     end
   end
+
+
+  def my_map_proc(&proc)
+    instance = self
+    result = []
+    instance.my_each do |e|
+      result.push(proc.call(e))
+    end
+    result
+  end
 end
