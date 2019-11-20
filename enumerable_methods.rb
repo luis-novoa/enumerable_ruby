@@ -49,4 +49,15 @@ module Enumerable
     result
   end
 
+  def my_none?
+    instance = self
+    result = true
+    instance.my_each do |e|
+      if yield(e)
+        result = false
+        break
+      end
+    end
+    result
+  end
 end
