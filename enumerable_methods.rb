@@ -100,4 +100,17 @@ module Enumerable
     end
     result
   end
+
+  def my_map_procblock(&proc)
+    instance = self
+    result = []
+    instance.my_each do |e|
+      if proc.nil?
+        result.push(yield(e))
+      else
+        result.push(proc.call(e))
+      end
+    end
+    result
+  end
 end
