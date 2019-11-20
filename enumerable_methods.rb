@@ -140,9 +140,13 @@ module Enumerable
     end
   end
 
-  def my_inject
+  def my_inject(initial = nil, sym = nil)
     instance = self
-    total = instance.shift
+    if initial.nil?
+      total = instance.shift
+    else
+      total = initial
+    end
     if block_given?
       instance.each do |e|
         total = yield(total, e)
@@ -191,7 +195,9 @@ module Enumerable
   end
 end
 
-var = [1, 4, 3, 4, "oi", "oi", "oi"]
+var = [1, 4, 3, 4]
 inst = Proc.new do |e| e += 1 end
-test = var.count(/i/)
+test = var.inject(2) do |sum, e|
+  sum + e
+end
 puts test
