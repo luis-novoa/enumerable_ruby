@@ -83,4 +83,11 @@ module Enumerable
     end
     total
   end
+
+  def multiply_els
+    instance = self
+    instance.my_inject do |sum, e|
+      sum * e
+    end
+  end
 end
