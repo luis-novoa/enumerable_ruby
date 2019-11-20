@@ -121,12 +121,8 @@ module Enumerable
 
   def multiply_els
     instance = self
-    if block_given?
-      instance.my_inject do |sum, e|
-        sum * e
-      end
-    else
-      instance.to_enum
+    instance.my_inject do |sum, e|
+      sum * e
     end
   end
 
