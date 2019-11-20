@@ -65,4 +65,13 @@ module Enumerable
     instance = self
     instance.length
   end
+
+  def my_map
+    instance = self
+    result = []
+    instance.my_each do |e|
+      result.push(yield(e))
+    end
+    result
+  end
 end
