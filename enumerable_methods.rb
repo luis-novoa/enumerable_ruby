@@ -8,4 +8,11 @@ module Enumerable
       yield(instance[i])
     end
   end
+
+  def my_each_with_index
+    instance = self
+    for i in 0...instance.length
+      yield(instance[i], i)
+    end
+  end
 end
