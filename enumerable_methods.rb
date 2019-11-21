@@ -3,37 +3,28 @@
 module Enumerable
   def my_each
     instance = self
-    if block_given?
-      for i in 0...instance.length
-        yield(instance[i])
-      end
-    else
-      instance.to_enum
+    return instance.to_enum unless block_given?
+    for i in 0...instance.length
+      yield(instance[i])
     end
   end
 
   def my_each_with_index
     instance = self
-    if block_given?
-      for i in 0...instance.length
-        yield(instance[i], i)
-      end
-    else
-      instance.to_enum
+    return instance.to_enum unless block_given?
+    for i in 0...instance.length
+      yield(instance[i], i)
     end
   end
 
   def my_select
     instance = self
     result = []
-    if block_given?
-      instance.my_each do |e|
-        result.push(e) if yield(e)
-      end
-      result
-    else
-      instance.to_enum
+    return instance.to_enum unless block_given?
+    instance.my_each do |e|
+      result.push(e) if yield(e)
     end
+    result
   end
 
   def my_all?(type = nil)
@@ -49,7 +40,8 @@ module Enumerable
         end
       end
       result
-    elsif block_given?
+    else
+      return instance.to_enum unless block_given?
       instance.my_each do |e|
         unless yield(e)
           result = false
@@ -57,8 +49,6 @@ module Enumerable
         end
       end
       result
-    else
-      instance.to_enum
     end
   end
 
@@ -75,7 +65,8 @@ module Enumerable
         end
       end
       result
-    elsif block_given?
+    else
+      return instance.to_enum unless block_given?
       instance.my_each do |e|
         if yield(e)
           result = true
@@ -83,8 +74,6 @@ module Enumerable
         end
       end
       result
-    else
-      instance.to_enum
     end
   end
 
@@ -93,7 +82,7 @@ module Enumerable
     result = true
     if !type.nil?
       raise 'warning: given block not used' if block_given?
-      
+
       instance.my_each do |e|
         if e == type || e.match(type) || e.class == type
           result = false
@@ -101,7 +90,8 @@ module Enumerable
         end
       end
       result
-    elsif block_given?
+    else
+      return instance.to_enum unless block_given?
       instance.my_each do |e|
         if yield(e)
           result = false
@@ -109,8 +99,6 @@ module Enumerable
         end
       end
       result
-    else
-      instance.to_enum
     end
   end
 
@@ -130,14 +118,11 @@ module Enumerable
   def my_map
     instance = self
     result = []
-    if block_given?
-      instance.my_each do |e|
-        result.push(yield(e))
-      end
-      result
-    else
-      instance.to_enum
+    return instance.to_enum unless block_given?
+    instance.my_each do |e|
+      result.push(yield(e))
     end
+    result
   end
 
   def my_inject(initial = nil, sym = nil)
@@ -163,13 +148,12 @@ module Enumerable
         total = operations[sym].call(total, e)
       end
       total
-    elsif block_given?
+    else
+      return instance.to_enum unless block_given?
       instance.each do |e|
         total = yield(total, e)
       end
       total
-    else
-      instance.to_enum
     end
   end
 
@@ -183,35 +167,29 @@ module Enumerable
   def my_map_proc(&proc)
     instance = self
     result = []
-    if block_given?
-      instance.my_each do |e|
-        result.push(proc.call(e))
-      end
-      result
-    else
-      instance.to_enum
+    return instance.to_enum unless block_given?
+    instance.my_each do |e|
+      result.push(proc.call(e))
     end
+    result
   end
 
   def my_map_procblock(&proc)
     instance = self
     result = []
-    if block_given?
-      instance.my_each do |e|
-        if proc.nil?
-          result.push(yield(e))
-        else
-          result.push(proc.call(e))
-        end
+    return instance.to_enum unless block_given?
+    instance.my_each do |e|
+      if proc.nil?
+        result.push(yield(e))
+      else
+        result.push(proc.call(e))
       end
-      result
-    else
-      instance.to_enum
     end
+    result
   end
 end
 
-# var = [1, 4, 3, 4]
-# inst = Proc.new do |e| e += 1 end
-# test = var.my_inject(:+)
-# puts test
+var = [1, 4, 3, 4]
+inst = Proc.new do |e| e += 1 end
+test = var.my_all?
+puts test
