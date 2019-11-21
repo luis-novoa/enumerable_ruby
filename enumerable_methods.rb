@@ -40,7 +40,8 @@ module Enumerable
     instance = self
     result = true
     if !type.nil?
-      raise "warning: given block not used" if block_given?
+      raise 'warning: given block not used' if block_given?
+
       instance.my_each do |e|
         unless e == type || e.match(type) || e.class == type
           result = false
@@ -65,7 +66,8 @@ module Enumerable
     instance = self
     result = false
     if !type.nil?
-      raise "warning: given block not used" if block_given?
+      raise 'warning: given block not used' if block_given?
+
       instance.my_each do |e|
         if e == type || e.match(type) || e.class == type
           result = true
@@ -90,7 +92,8 @@ module Enumerable
     instance = self
     result = true
     if !type.nil?
-      raise "warning: given block not used" if block_given?
+      raise 'warning: given block not used' if block_given?
+      
       instance.my_each do |e|
         if e == type || e.match(type) || e.class == type
           result = false
@@ -148,11 +151,11 @@ module Enumerable
     total = initial
     total = instance.shift if total.nil?
     operations = {
-      :+ => Proc.new do |a, b| a + b end,
-      :- => Proc.new do |a, b| a - b end,
-      :* => Proc.new do |a, b| a * b end,
-      :/ => Proc.new do |a, b| a / b end,
-      :** => Proc.new do |a, b| a ** b end
+      :+ => proc { |a, b| a + b },
+      :- => proc { |a, b| a - b },
+      :* => proc { |a, b| a * b },
+      :/ => proc { |a, b| a / b },
+      :** => proc { |a, b| a**b }
     }
     if !sym.nil?
       sym = sym.to_sym if sym.class == String
@@ -208,9 +211,7 @@ module Enumerable
   end
 end
 
-var = [1, 4, 3, 4]
-inst = Proc.new do |e| e += 1 end
-test = var.inject(:+) do |sum, e|
-  sum + e
-end
-puts test
+# var = [1, 4, 3, 4]
+# inst = Proc.new do |e| e += 1 end
+# test = var.my_inject(:+)
+# puts test
