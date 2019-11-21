@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-# rubocop:disable Style/CaseEquality
-
 module Enumerable
   def my_each
     instance = self
@@ -40,11 +38,13 @@ module Enumerable
       instance.my_each do |e|
         return false unless e == type || (e.match(type) if e.is_a?(String || Symbol)) || e.class == type
       end
-    else
-      return instance.to_enum unless block_given?
-
+    elsif block_given?
       instance.my_each do |e|
         return false unless yield(e)
+      end
+    else
+      instance.my_each do |e|
+        return false if e == (nil || false)
       end
     end
     true
@@ -175,3 +175,6 @@ module Enumerable
     result
   end
 end
+
+array = [1,2,5,4,7]
+p array.my_any? == array.any?
