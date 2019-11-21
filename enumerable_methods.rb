@@ -33,65 +33,48 @@ module Enumerable
       raise 'warning: given block not used' if block_given?
 
       instance.my_each do |e|
-        return false unless e == type || e.match(type) || e.class == type
+        return false unless e == type || (e.match(type) if e.is_a?(String || Symbol)) || e.class == type
       end
-      true
     else
       return instance.to_enum unless block_given?
       instance.my_each do |e|
         return false unless yield(e)
       end
-      true
     end
+    true
   end
 
   def my_any?(type = nil)
     instance = self
-    result = false
     if !type.nil?
       raise 'warning: given block not used' if block_given?
 
       instance.my_each do |e|
-        if e == type || e.match(type) || e.class == type
-          result = true
-          break
-        end
+        return true if e == type || (e.match(type) if e.is_a?(String || Symbol)) || e.class == type
       end
-      result
     else
       return instance.to_enum unless block_given?
       instance.my_each do |e|
-        if yield(e)
-          result = true
-          break
-        end
+        return true if yield(e)
       end
-      result
+      false
     end
   end
 
   def my_none?(type = nil)
     instance = self
-    result = true
     if !type.nil?
       raise 'warning: given block not used' if block_given?
 
       instance.my_each do |e|
-        if e == type || e.match(type) || e.class == type
-          result = false
-          break
-        end
+        return false if e == type || (e.match(type) if e.is_a?(String || Symbol)) || e.class == type
       end
-      result
     else
       return instance.to_enum unless block_given?
       instance.my_each do |e|
-        if yield(e)
-          result = false
-          break
-        end
+        return true if yield(e)
       end
-      result
+      true
     end
   end
 
@@ -183,6 +166,8 @@ module Enumerable
 end
 
 var = [1, 4, 3, 4]
+# var = ["ai", "oi", "ui"]
+# var.each do |e| e.to_sym end
 inst = Proc.new do |e| e += 1 end
-test = var.my_all?
+test = var.my_all?(/\i/)
 puts test
