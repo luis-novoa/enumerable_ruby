@@ -1,9 +1,12 @@
 # frozen_string_literal: true
 
+# rubocop:disable Style/CaseEquality
+
 module Enumerable
   def my_each
     instance = self
     return instance.to_enum unless block_given?
+
     for i in 0...instance.length
       yield(instance[i])
     end
@@ -12,6 +15,7 @@ module Enumerable
   def my_each_with_index
     instance = self
     return instance.to_enum unless block_given?
+
     for i in 0...instance.length
       yield(instance[i], i)
     end
@@ -21,6 +25,7 @@ module Enumerable
     instance = self
     result = []
     return instance.to_enum unless block_given?
+
     instance.my_each do |e|
       result.push(e) if yield(e)
     end
@@ -37,6 +42,7 @@ module Enumerable
       end
     else
       return instance.to_enum unless block_given?
+
       instance.my_each do |e|
         return false unless yield(e)
       end
@@ -54,6 +60,7 @@ module Enumerable
       end
     else
       return instance.to_enum unless block_given?
+
       instance.my_each do |e|
         return true if yield(e)
       end
@@ -71,6 +78,7 @@ module Enumerable
       end
     else
       return instance.to_enum unless block_given?
+
       instance.my_each do |e|
         return true if yield(e)
       end
@@ -95,6 +103,7 @@ module Enumerable
     instance = self
     result = []
     return instance.to_enum unless block_given?
+
     instance.my_each do |e|
       result.push(yield(e))
     end
@@ -123,14 +132,14 @@ module Enumerable
       instance.each do |e|
         total = operations[sym].call(total, e)
       end
-      total
     else
       return instance.to_enum unless block_given?
+
       instance.each do |e|
         total = yield(total, e)
       end
-      total
     end
+    total
   end
 
   def multiply_els
@@ -144,6 +153,7 @@ module Enumerable
     instance = self
     result = []
     return instance.to_enum unless block_given?
+
     instance.my_each do |e|
       result.push(proc.call(e))
     end
@@ -154,6 +164,7 @@ module Enumerable
     instance = self
     result = []
     return instance.to_enum unless block_given?
+
     instance.my_each do |e|
       if proc.nil?
         result.push(yield(e))
@@ -165,9 +176,9 @@ module Enumerable
   end
 end
 
-var = [1, 4, 3, 4]
-# var = ["ai", "oi", "ui"]
-# var.each do |e| e.to_sym end
-inst = Proc.new do |e| e += 1 end
-test = var.my_all?(/\i/)
-puts test
+# var = [1, 4, 3, 4]
+# # var = ["ai", "oi", "ui"]
+# # var.each do |e| e.to_sym end
+# inst = Proc.new do |e| e += 1 end
+# test = var.my_all?(/\i/)
+# puts test
