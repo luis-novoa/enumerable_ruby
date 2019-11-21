@@ -120,10 +120,8 @@ module Enumerable
         count += 1 if e == arg
       end
       count
-    elsif block_given?
-      instance.length
     else
-      instance.to_enum
+      instance.length
     end
   end
 
@@ -206,5 +204,7 @@ end
 
 var = [1, 4, 3, 4]
 inst = Proc.new do |e| e += 1 end
-test = var.my_inject(:**)
+test = var.inject(0, :+) do |sum, e|
+  sum + e
+end
 puts test
