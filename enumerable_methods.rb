@@ -138,6 +138,10 @@ module Enumerable
   end
 
   def my_inject(initial = nil, sym = nil)
+    if initial.class == Symbol && sym.nil?
+      sym = initial
+      initial = nil
+    end
     instance = self
     total = initial
     total = instance.shift if total.nil?
@@ -149,6 +153,7 @@ module Enumerable
       :** => Proc.new do |a, b| a ** b end
     }
     if !sym.nil?
+      sym = sym.to_sym if sym.class == String
       instance.each do |e|
         total = operations[sym].call(total, e)
       end
@@ -203,7 +208,5 @@ end
 
 var = [1, 4, 3, 4]
 inst = Proc.new do |e| e += 1 end
-test = var.my_none?(Integer) do | e|
-  e > 0
-end
+test = var.my_inject(1, "+")
 puts test
