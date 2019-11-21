@@ -61,7 +61,7 @@ module Enumerable
     end
   end
 
-  def my_any?
+  def my_any?(type = nil)
     instance = self
     result = false
     if !type.nil?
@@ -86,7 +86,7 @@ module Enumerable
     end
   end
 
-  def my_none?
+  def my_none?(type = nil)
     instance = self
     result = true
     if !type.nil?
@@ -203,7 +203,7 @@ end
 
 var = [1, 4, 3, 4]
 inst = Proc.new do |e| e += 1 end
-test = var.my_none? Integer do | e|
+test = var.my_none?(Integer) do | e|
   e > 0
 end
 puts test
