@@ -36,7 +36,7 @@ module Enumerable
       raise 'warning: given block not used' if block_given?
 
       instance.my_each do |e|
-        return false unless e == type || (e.match(type) if e.is_a?(String || Symbol)) || e.class == type
+        return false unless e == type || (type.match(e) if (defined?(type.match) && e.respond_to?(:match))) || e.class == type
       end
     elsif block_given?
       instance.my_each do |e|
@@ -56,7 +56,7 @@ module Enumerable
       raise 'warning: given block not used' if block_given?
 
       instance.my_each do |e|
-        return true if e == type || (e.match(type) if e.is_a?(String || Symbol)) || e.class == type
+        return true if e == type || (type.match(e) if (defined?(type.match) && e.respond_to?(:match))) || e.class == type
       end
     elsif block_given?
       instance.my_each do |e|
@@ -178,9 +178,9 @@ module Enumerable
   end
 end
 
-# array = [1, 2, 1]
-# p array.my_any? == array.any?
-# p array.my_any?
-# p array.any?
+# array = [1, false, "hi", [2]]
+# p array.my_any?(Array) == array.any?(Array)
+# p array.my_any?(Array)
+# p array.any?(Array)
 
-p "#my_any returns true if any element is truthy".length
+p "#my_any and #my_all recognize all classes".length
