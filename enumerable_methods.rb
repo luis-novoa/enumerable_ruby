@@ -2,7 +2,7 @@
 
 module Enumerable
   def my_each
-    instance = self
+    instance = self.clone
     return instance.to_enum unless block_given?
 
     for i in 0...instance.length
@@ -11,7 +11,7 @@ module Enumerable
   end
 
   def my_each_with_index
-    instance = self
+    instance = self.clone
     return instance.to_enum unless block_given?
 
     for i in 0...instance.length
@@ -20,7 +20,7 @@ module Enumerable
   end
 
   def my_select
-    instance = self
+    instance = self.clone
     result = []
     return instance.to_enum unless block_given?
 
@@ -31,7 +31,7 @@ module Enumerable
   end
 
   def my_all?(type = nil)
-    instance = self
+    instance = self.clone
     if !type.nil?
       raise 'warning: given block not used' if block_given?
 
@@ -51,7 +51,7 @@ module Enumerable
   end
 
   def my_any?(type = nil)
-    instance = self
+    instance = self.clone
     if !type.nil?
       raise 'warning: given block not used' if block_given?
 
@@ -71,7 +71,7 @@ module Enumerable
   end
 
   def my_none?(type = nil)
-    instance = self
+    instance = self.clone
     if !type.nil?
       raise 'warning: given block not used' if block_given?
 
@@ -91,7 +91,7 @@ module Enumerable
   end
 
   def my_count(arg = nil, &proc)
-    instance = self
+    instance = self.clone
     if !arg.nil?
       puts 'warning: given block not used' if !proc.nil?
       count = 0
@@ -111,7 +111,7 @@ module Enumerable
   end
 
   def my_map
-    instance = self
+    instance = self.clone
     result = []
     return instance.to_enum unless block_given?
 
@@ -121,14 +121,14 @@ module Enumerable
     result
   end
 
-  def my_inject(initial = nil, sym = nil)
+  def my_inject(initial = nil, sym = nil, &proc)
     if initial.class == (Symbol || String) && sym.nil? && !block_given?
       sym = initial
       initial = nil
     elsif initial.class == (Symbol || String) && sym.class == (Symbol || String)
       raise "undefined method `#{sym}' for #{inspect initial}"
     end
-    instance = self
+    instance = self.clone
     total = initial
     total = instance.shift if total.nil?
     operations = {
@@ -143,6 +143,10 @@ module Enumerable
       instance.each do |e|
         total = operations[sym].call(total, e)
       end
+    elsif !proc.nil?
+      instance.each do |e|
+        total = proc.call(total, e)
+      end
     else
       return instance.to_enum unless block_given?
 
@@ -154,14 +158,14 @@ module Enumerable
   end
 
   def multiply_els
-    instance = self
+    instance = self.clone
     instance.my_inject do |sum, e|
       sum * e
     end
   end
 
   def my_map_proc(&proc)
-    instance = self
+    instance = self.clone
     result = []
     return instance.to_enum unless block_given?
 
@@ -172,7 +176,7 @@ module Enumerable
   end
 
   def my_map_procblock(&proc)
-    instance = self
+    instance = self.clone
     result = []
     return instance.to_enum unless block_given?
 
@@ -186,10 +190,3 @@ module Enumerable
     result
   end
 end
-
-block = proc { |num| num > 4 }
-array = [1,2,5,4,7]
-p array.my_count(&block) == array.count(&block)
-p array.my_count(7, &block)
-p array.count(&block)
-#p "#my_any and #my_all recognize all classes".length
