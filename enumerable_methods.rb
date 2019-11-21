@@ -90,12 +90,19 @@ module Enumerable
     true
   end
 
-  def my_count(arg = nil)
+  def my_count(arg = nil, &proc)
     instance = self
     if !arg.nil?
+      puts 'warning: given block not used' if !proc.nil?
       count = 0
       instance.my_each do |e|
         count += 1 if e == arg
+      end
+      count
+    elsif !proc.nil?
+      count = 0
+      instance.my_each do |e|
+        count += 1 if proc.call(e)
       end
       count
     else
@@ -180,6 +187,9 @@ module Enumerable
   end
 end
 
-array = %w[dog door rod blade]
-p array.my_none?(5) == array.none?(5)
+block = proc { |num| num > 4 }
+array = [1,2,5,4,7]
+p array.my_count(&block) == array.count(&block)
+p array.my_count(7, &block)
+p array.count(&block)
 #p "#my_any and #my_all recognize all classes".length
