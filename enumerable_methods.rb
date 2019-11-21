@@ -138,9 +138,11 @@ module Enumerable
   end
 
   def my_inject(initial = nil, sym = nil)
-    if initial.class == Symbol && sym.nil?
+    if initial.class == (Symbol || String) && sym.nil?
       sym = initial
       initial = nil
+    elsif initial.class == (Symbol || String) && sym.class == (Symbol || String)
+      raise "undefined method `#{sym}' for #{inspect initial}"
     end
     instance = self
     total = initial
@@ -208,5 +210,5 @@ end
 
 var = [1, 4, 3, 4]
 inst = Proc.new do |e| e += 1 end
-test = var.my_inject(1, "+")
+test = var.my_inject(:+, "-")
 puts test
