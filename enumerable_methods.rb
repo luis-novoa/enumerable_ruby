@@ -5,8 +5,10 @@ module Enumerable
     instance = self.clone
     return instance.to_enum unless block_given?
 
-    for i in 0...instance.length
+    loop do
+      i = 0
       yield(instance[i])
+      break if i == instance.length - 1
     end
   end
 
@@ -14,8 +16,10 @@ module Enumerable
     instance = self.clone
     return instance.to_enum unless block_given?
 
-    for i in 0...instance.length
+    loop do
+      i = 0
       yield(instance[i], i)
+      break if i == instance.length - 1
     end
   end
 
