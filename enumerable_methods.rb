@@ -76,7 +76,7 @@ module Enumerable
       raise 'warning: given block not used' if block_given?
 
       instance.my_each do |e|
-        return false if e == type || (e.match(type) if e.is_a?(String || Symbol)) || e.class == type
+        return false if e == type || (type.match(e) if (defined?(type.match) && e.respond_to?(:match))) || e.class == type
       end
     elsif block_given?
       instance.my_each do |e|
@@ -181,5 +181,5 @@ module Enumerable
 end
 
 array = [1,2,5,4,7]
-p array.my_none?(Integer) == array.none?(Integer)
+  p array.my_none?(Array) == array.none?(Array)
 #p "#my_any and #my_all recognize all classes".length
