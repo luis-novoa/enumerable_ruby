@@ -175,10 +175,3 @@ module Enumerable
     result
   end
 end
-
-# var = [1, 4, 3, 4]
-# # var = ["ai", "oi", "ui"]
-# # var.each do |e| e.to_sym end
-# inst = Proc.new do |e| e += 1 end
-# test = var.my_all?(/\i/)
-# puts test
