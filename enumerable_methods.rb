@@ -78,14 +78,16 @@ module Enumerable
       instance.my_each do |e|
         return false if e == type || (e.match(type) if e.is_a?(String || Symbol)) || e.class == type
       end
-    else
-      return instance.to_enum unless block_given?
-
+    elsif block_given?
       instance.my_each do |e|
-        return true if yield(e)
+        return false if yield(e)
       end
-      true
+    else
+      instance.my_each do |e|
+        return false unless e == true
+      end
     end
+    true
   end
 
   def my_count(arg = nil)
@@ -178,9 +180,6 @@ module Enumerable
   end
 end
 
-# array = [1, false, "hi", [2]]
-# p array.my_any?(Array) == array.any?(Array)
-# p array.my_any?(Array)
-# p array.any?(Array)
-
-p "#my_any and #my_all recognize all classes".length
+array = [1,2,5,4,7]
+p array.my_none?(Integer) == array.none?(Integer)
+#p "#my_any and #my_all recognize all classes".length
