@@ -44,7 +44,7 @@ module Enumerable
       end
     else
       instance.my_each do |e|
-        return false if e == (nil || false)
+        return false if e.nil? || e == false
       end
     end
     true
@@ -58,14 +58,16 @@ module Enumerable
       instance.my_each do |e|
         return true if e == type || (e.match(type) if e.is_a?(String || Symbol)) || e.class == type
       end
-    else
-      return instance.to_enum unless block_given?
-
+    elsif block_given?
       instance.my_each do |e|
         return true if yield(e)
       end
-      false
+    else
+      instance.my_each do |e|
+        return true unless e.nil? || e == false
+      end
     end
+    false
   end
 
   def my_none?(type = nil)
@@ -176,6 +178,9 @@ module Enumerable
   end
 end
 
-array = [1,2,5,4,7]
-p array.my_any? == array.any?
-p "my_any? when no block or argument is given returns true if at least one of the collection is not false or nil".count
+# array = [1, 2, 1]
+# p array.my_any? == array.any?
+# p array.my_any?
+# p array.any?
+
+p "#my_any returns true if any element is truthy".length
