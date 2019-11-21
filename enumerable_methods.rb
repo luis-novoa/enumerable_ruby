@@ -6,9 +6,10 @@ module Enumerable
     instance = instance.clone
     return instance.to_enum unless block_given?
 
+    i = 0
     loop do
-      i = 0
       yield(instance[i])
+      i += 1
       break if i == instance.length - 1
     end
   end
@@ -18,9 +19,10 @@ module Enumerable
     instance = instance.clone
     return instance.to_enum unless block_given?
 
+    i = 0
     loop do
-      i = 0
       yield(instance[i], i)
+      i += 1
       break if i == instance.length - 1
     end
   end
@@ -86,7 +88,7 @@ module Enumerable
       raise 'warning: given block not used' if block_given?
 
       instance.my_each do |e|
-        return false if e == type || (type.match(e) if (defined?(type.match) && e.respond_to?(:match))) || e.class == type
+        return false if e == type || (type.match(e) if defined?(type.match) && e.respond_to?(:match)) || e.class == type
       end
     elsif block_given?
       instance.my_each do |e|
@@ -104,7 +106,7 @@ module Enumerable
     instance = self
     instance = instance.clone
     if !arg.nil?
-      puts 'warning: given block not used' if !proc.nil?
+      puts 'warning: given block not used' unless proc.nil?
       count = 0
       instance.my_each do |e|
         count += 1 if e == arg
