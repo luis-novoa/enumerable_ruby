@@ -178,3 +178,4 @@ end
 
 array = [1,2,5,4,7]
 p array.my_any? == array.any?
+p "my_any? when no block or argument is given returns true if at least one of the collection is not false or nil".count
