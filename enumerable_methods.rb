@@ -40,7 +40,7 @@ module Enumerable
     instance = self
     result = true
     if !type.nil?
-      puts "warning: given block not used" if block_given?
+      raise "warning: given block not used" if block_given?
       instance.my_each do |e|
         unless e == type || e.match(type) || e.class == type
           result = false
@@ -65,7 +65,7 @@ module Enumerable
     instance = self
     result = false
     if !type.nil?
-      puts "warning: given block not used" if block_given?
+      raise "warning: given block not used" if block_given?
       instance.my_each do |e|
         if e == type || e.match(type) || e.class == type
           result = true
