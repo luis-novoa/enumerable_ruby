@@ -138,7 +138,7 @@ module Enumerable
   end
 
   def my_inject(initial = nil, sym = nil)
-    if initial.class == (Symbol || String) && sym.nil?
+    if initial.class == (Symbol || String) && sym.nil? && !block_given?
       sym = initial
       initial = nil
     elsif initial.class == (Symbol || String) && sym.class == (Symbol || String)
@@ -210,5 +210,7 @@ end
 
 var = [1, 4, 3, 4]
 inst = Proc.new do |e| e += 1 end
-test = var.my_inject(:+, "-")
+test = var.inject(:+) do |sum, e|
+  sum + e
+end
 puts test
