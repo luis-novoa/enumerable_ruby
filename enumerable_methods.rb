@@ -29,26 +29,19 @@ module Enumerable
 
   def my_all?(type = nil)
     instance = self
-    result = true
     if !type.nil?
       raise 'warning: given block not used' if block_given?
 
       instance.my_each do |e|
-        unless e == type || e.match(type) || e.class == type
-          result = false
-          break
-        end
+        return false unless e == type || e.match(type) || e.class == type
       end
-      result
+      true
     else
       return instance.to_enum unless block_given?
       instance.my_each do |e|
-        unless yield(e)
-          result = false
-          break
-        end
+        return false unless yield(e)
       end
-      result
+      true
     end
   end
 
