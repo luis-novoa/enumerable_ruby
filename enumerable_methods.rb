@@ -90,7 +90,7 @@ module Enumerable
     instance = self
     result = true
     if !type.nil?
-      puts "warning: given block not used" if block_given?
+      raise "warning: given block not used" if block_given?
       instance.my_each do |e|
         if e == type || e.match(type) || e.class == type
           result = false
@@ -115,7 +115,6 @@ module Enumerable
     instance = self
     if !arg.nil?
       count = 0
-      puts "warning: given block not used" if block_given?
       instance.my_each do |e|
         count += 1 if e == arg
       end
@@ -204,7 +203,7 @@ end
 
 var = [1, 4, 3, 4]
 inst = Proc.new do |e| e += 1 end
-test = var.inject(0, :+) do |sum, e|
-  sum + e
+test = var.my_none? Integer do | e|
+  e > 0
 end
 puts test
