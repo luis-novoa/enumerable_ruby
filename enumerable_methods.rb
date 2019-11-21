@@ -180,6 +180,6 @@ module Enumerable
   end
 end
 
-array = [1,2,5,4,7]
-  p array.my_none?(Array) == array.none?(Array)
+array = %w[dog door rod blade]
+p array.my_none?(5) == array.none?(5)
 #p "#my_any and #my_all recognize all classes".length
