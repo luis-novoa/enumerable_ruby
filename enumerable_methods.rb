@@ -10,7 +10,7 @@ module Enumerable
     loop do
       yield(instance[i])
       i += 1
-      break if i == instance.length - 1
+      break if i == instance.length
     end
   end
 
@@ -23,7 +23,7 @@ module Enumerable
     loop do
       yield(instance[i], i)
       i += 1
-      break if i == instance.length - 1
+      break if i == instance.length
     end
   end
 
@@ -46,7 +46,10 @@ module Enumerable
       raise 'warning: given block not used' if block_given?
 
       instance.my_each do |e|
-        return false unless e == type || (type.match(e) if (defined?(type.match) && e.respond_to?(:match))) || e.class == type
+        if defined?(type.match) && e.respond_to?(:match)
+          return false unless type.match(e)
+        end
+        return false unless e == type || e.class == type
       end
     elsif block_given?
       instance.my_each do |e|
@@ -67,7 +70,7 @@ module Enumerable
       raise 'warning: given block not used' if block_given?
 
       instance.my_each do |e|
-        return true if e == type || (type.match(e) if (defined?(type.match) && e.respond_to?(:match))) || e.class == type
+        return true if e == type || (type.match(e) if defined?(type.match) && e.respond_to?(:match)) || e.class == type
       end
     elsif block_given?
       instance.my_each do |e|
@@ -135,17 +138,7 @@ module Enumerable
     result
   end
 
-  def my_inject(initial = nil, sym = nil, &proc)
-    if initial.class == (Symbol || String) && sym.nil? && !block_given?
-      sym = initial
-      initial = nil
-    elsif initial.class == (Symbol || String) && sym.class == (Symbol || String)
-      raise "undefined method `#{sym}' for #{inspect initial}"
-    end
-    instance = self
-    instance = instance.clone
-    total = initial
-    total = instance.shift if total.nil?
+  def my_inject(initial = 0, sym = nil, &proc)
     operations = {
       :+ => proc { |a, b| a + b },
       :- => proc { |a, b| a - b },
@@ -153,20 +146,16 @@ module Enumerable
       :/ => proc { |a, b| a / b },
       :** => proc { |a, b| a**b }
     }
-    if !sym.nil?
-      sym = sym.to_sym if sym.class == String
-      instance.each do |e|
+    total = initial
+    sym, total = initial.to_sym, sym if sym.nil? && initial.respond_to?(:to_sym)
+    total ||= 0
+    instance = self
+    instance = instance.clone
+    instance.my_each do |e|
+      if operations.include?(sym)
         total = operations[sym].call(total, e)
-      end
-    elsif !proc.nil?
-      instance.each do |e|
-        total = proc.call(total, e)
-      end
-    else
-      return instance.to_enum unless block_given?
-
-      instance.each do |e|
-        total = yield(total, e)
+      elsif block_given? || !proc.nil?
+        total = proc.call(total, e) || yield(total, e)
       end
     end
     total
