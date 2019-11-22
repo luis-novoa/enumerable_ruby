@@ -156,7 +156,6 @@ module Enumerable
         total = operations[sym].call(total, e)
       elsif block_given? || !proc.nil?
         total = proc.call(total, e) || yield(total, e)
-        #total = yield(total, e)
       end
     end
     total
