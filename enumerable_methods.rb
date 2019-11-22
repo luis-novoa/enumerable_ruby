@@ -138,7 +138,7 @@ module Enumerable
     result
   end
 
-  def my_inject(initial = 0, sym = nil, &proc)
+  def my_inject(initial = nil, sym = nil)
     operations = {
       :+ => proc { |a, b| a + b },
       :- => proc { |a, b| a - b },
@@ -146,17 +146,17 @@ module Enumerable
       :/ => proc { |a, b| a / b },
       :** => proc { |a, b| a**b }
     }
-    total = initial
-    sym, total = initial.to_sym, sym if sym.nil? && initial.respond_to?(:to_sym)
-    total ||= 0
     instance = self
     instance = instance.clone
+    if sym.nil? && initial.respond_to?(:to_sym)
+      sym = initial.to_sym
+      initial = nil
+    end
+    total = initial
+    total = instance.shift if initial.nil?
     instance.my_each do |e|
-      if operations.include?(sym)
-        total = operations[sym].call(total, e)
-      elsif block_given? || !proc.nil?
-        total = proc.call(total, e) || yield(total, e)
-      end
+      total = operations[sym].call(total, e) unless sym.nil?
+      total = yield(total, e) if block_given?
     end
     total
   end
