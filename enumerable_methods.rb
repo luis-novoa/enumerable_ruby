@@ -46,7 +46,10 @@ module Enumerable
       raise 'warning: given block not used' if block_given?
 
       instance.my_each do |e|
-        return false unless e == type || (type.match(e) if (defined?(type.match) && e.respond_to?(:match))) || e.class == type
+        if defined?(type.match) && e.respond_to?(:match)
+          return false unless type.match(e)
+        end
+        return false unless e == type || e.class == type
       end
     elsif block_given?
       instance.my_each do |e|
@@ -67,7 +70,7 @@ module Enumerable
       raise 'warning: given block not used' if block_given?
 
       instance.my_each do |e|
-        return true if e == type || (type.match(e) if (defined?(type.match) && e.respond_to?(:match))) || e.class == type
+        return true if e == type || (type.match(e) if defined?(type.match) && e.respond_to?(:match)) || e.class == type
       end
     elsif block_given?
       instance.my_each do |e|
