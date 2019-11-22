@@ -145,7 +145,10 @@ module Enumerable
       :/ => proc { |a, b| a / b },
       :** => proc { |a, b| a**b }
     }
-    sym, initial = initial.to_sym, sym if sym.nil? && operations.include?(initial.to_sym)
+    # if block_given?
+
+    # end
+    sym, initial = initial.to_sym, sym if sym.nil? && initial.respond_to?(:to_sym)
     p initial
     p sym
   end
