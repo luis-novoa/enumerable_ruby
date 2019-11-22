@@ -87,22 +87,43 @@ module Enumerable
   def my_none?(type = nil)
     instance = self
     instance = instance.clone
-    if !type.nil?
-      raise 'warning: given block not used' if block_given?
-
-      instance.my_each do |e|
-        return false if e == type || (type.match(e) if defined?(type.match) && e.respond_to?(:match)) || e.class == type
-      end
-    elsif block_given?
-      instance.my_each do |e|
-        return false if yield(e)
-      end
-    else
-      instance.my_each do |e|
+    puts 'warning: given block not used' if block_given? && !type.nil?
+    instance.my_each do |e|
+      if !type.nil?
+        reg = type.match(e) if defined?(type.match) && e.respond_to?(:match)
+        return false if reg
+        return false if e == type
+        return false if e.class == type
+      elsif block_given?
+        return true unless yield(e)
+      else
         return false unless e == true
       end
     end
     true
+    # if !type.nil?
+    #   raise 'warning: given block not used' if block_given?
+
+    #   instance.my_each do |e|
+    #     return false if e == type
+    #     #return false if (type.match(e) if defined?(type.match) && e.respond_to?(:match))
+    #     return false if e.class == type
+    #   end
+    #   if defined?(type.match && e.respond_to?(:match))
+    #     instance.my_each do |e|
+    #       return false if type.match(e)
+    #     end
+    #   end
+    # elsif block_given?
+    #   instance.my_each do |e|
+    #     return false if yield(e)
+    #   end
+    # else
+    #   instance.my_each do |e|
+    #     return false unless e == true
+    #   end
+    # end
+    # true
   end
 
   def my_count(arg = nil, &proc)
@@ -197,3 +218,12 @@ module Enumerable
     result
   end
 end
+
+false_block = proc { |num| num > 10 };
+array = [1,2,5,4,7]
+p array.my_none?(&false_block)  == array.none?(&false_block)
+p array.my_none? == array.none?
+p array.my_none?(Array)  == array.none?(Array)
+array = %w[dog door rod blade]
+p array.my_none?(/c/) == array.none?(/c/)
+p array.my_none?(5) == array.none?(5)
