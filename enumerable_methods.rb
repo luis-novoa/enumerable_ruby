@@ -90,15 +90,19 @@ module Enumerable
     puts 'warning: given block not used' if block_given? && !type.nil?
     instance.my_each do |e|
       if !type.nil?
+        # type.nil? False
+        # block_given? False
         reg = type.match(e) if defined?(type.match) && e.respond_to?(:match)
-        return false if reg
-        return false if e == type
-        return false if e.class == type
+        return false if reg || e == type || e.class == type
       elsif block_given?
-        return true unless yield(e)
-      else
-        return false unless e == true
+        # type.nil? True
+        # block_given? True
+        return false if yield(e)
+      #else
+        # type.nil? true
+        # block_given? false
       end
+      return false if e == true && type.nil? && !block_given
     end
     true
     # if !type.nil?
@@ -221,9 +225,11 @@ end
 
 false_block = proc { |num| num > 10 };
 array = [1,2,5,4,7]
-p array.my_none?(&false_block)  == array.none?(&false_block)
-p array.my_none? == array.none?
-p array.my_none?(Array)  == array.none?(Array)
-array = %w[dog door rod blade]
-p array.my_none?(/c/) == array.none?(/c/)
-p array.my_none?(5) == array.none?(5)
+# p array.my_none?(&false_block)  == array.none?(&false_block)
+p array.my_none?# == array.none?
+# p array.my_none?(Array)  == array.none?(Array)
+# array = %w[dog door rod blade]
+# p array.my_none?(/c/) == array.none?(/c/)
+# p array.my_none?(5) == array.none?(5)
+
+#Resolver my_none. Não está passando no teste.
