@@ -137,18 +137,7 @@ module Enumerable
     end
     result
   end
-
   def my_inject(initial = nil, sym = nil, &proc)
-    if initial.class == (Symbol || String) && sym.nil? && !block_given?
-      sym = initial
-      initial = nil
-    elsif initial.class == (Symbol || String) && sym.class == (Symbol || String)
-      raise "undefined method `#{sym}' for #{inspect initial}"
-    end
-    instance = self
-    instance = instance.clone
-    total = initial
-    total = instance.shift if total.nil?
     operations = {
       :+ => proc { |a, b| a + b },
       :- => proc { |a, b| a - b },
@@ -156,24 +145,46 @@ module Enumerable
       :/ => proc { |a, b| a / b },
       :** => proc { |a, b| a**b }
     }
-    if !sym.nil?
-      sym = sym.to_sym if sym.class == String
-      instance.each do |e|
-        total = operations[sym].call(total, e)
-      end
-    elsif !proc.nil?
-      instance.each do |e|
-        total = proc.call(total, e)
-      end
-    else
-      return instance.to_enum unless block_given?
-
-      instance.each do |e|
-        total = yield(total, e)
-      end
-    end
-    total
+    sym, initial = initial.to_sym, sym if sym.nil? && operations.include?(initial.to_sym)
+    p initial
+    p sym
   end
+  # def my_inject(initial = nil, sym = nil, &proc)
+  #   if initial.class == (Symbol || String) && sym.nil? && !block_given?
+  #     sym = initial
+  #     initial = nil
+  #   elsif initial.class == (Symbol || String) && sym.class == (Symbol || String)
+  #     raise "undefined method `#{sym}' for #{inspect initial}"
+  #   end
+  #   instance = self
+  #   instance = instance.clone
+  #   total = initial
+  #   total = instance.shift if total.nil?
+  #   operations = {
+  #     :+ => proc { |a, b| a + b },
+  #     :- => proc { |a, b| a - b },
+  #     :* => proc { |a, b| a * b },
+  #     :/ => proc { |a, b| a / b },
+  #     :** => proc { |a, b| a**b }
+  #   }
+  #   if !sym.nil?
+  #     sym = sym.to_sym if sym.class == String
+  #     instance.each do |e|
+  #       total = operations[sym].call(total, e)
+  #     end
+  #   elsif !proc.nil?
+  #     instance.each do |e|
+  #       total = proc.call(total, e)
+  #     end
+  #   else
+  #     return instance.to_enum unless block_given?
+
+  #     instance.each do |e|
+  #       total = yield(total, e)
+  #     end
+  #   end
+  #   total
+  # end
 
   def multiply_els
     instance = self
@@ -210,4 +221,10 @@ module Enumerable
     end
     result
   end
+end
+
+array = [1,2,5,4,7]
+#p array.my_inject(:+) == array.inject(:+)
+array.my_inject(1) do |sum, e|
+  sum + e
 end
