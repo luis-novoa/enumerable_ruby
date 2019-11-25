@@ -42,22 +42,14 @@ module Enumerable
   def my_all?(type = nil)
     instance = self
     instance = instance.clone
-    if !type.nil?
-      raise 'warning: given block not used' if block_given?
+    puts 'warning: given block not used' if block_given? && !type.nil?
+    instance.my_each do |e|
+      is_true = truthy(e, type)
+      is_true ||= truthy_no_typeblock(e, type.nil?, !block_given?)
+      return false unless is_true
 
-      instance.my_each do |e|
-        if defined?(type.match) && e.respond_to?(:match)
-          return false unless type.match(e)
-        end
-        return false unless e == type || e.class == type
-      end
-    elsif block_given?
-      instance.my_each do |e|
+      if block_given?
         return false unless yield(e)
-      end
-    else
-      instance.my_each do |e|
-        return false if e.nil? || e == false
       end
     end
     true
@@ -66,22 +58,8 @@ module Enumerable
   def my_any?(type = nil)
     instance = self
     instance = instance.clone
-    if !type.nil?
-      raise 'warning: given block not used' if block_given?
-
-      instance.my_each do |e|
-        return true if e == type || (type.match(e) if defined?(type.match) && e.respond_to?(:match)) || e.class == type
-      end
-    elsif block_given?
-      instance.my_each do |e|
-        return true if yield(e)
-      end
-    else
-      instance.my_each do |e|
-        return true unless e.nil? || e == false
-      end
-    end
-    false
+    puts 'warning: given block not used' if block_given? && !type.nil?
+    !instance.my_none?(type)
   end
 
   def my_none?(type = nil)
