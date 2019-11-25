@@ -50,6 +50,7 @@ module Enumerable
       is_true ||= truthy_no_typeblock(e, type.nil?, !block_given?)
       if block_given?
         return false unless yield(e)
+
         is_true ||= true
       end
       return false unless is_true
@@ -173,12 +174,18 @@ end
 def truthy(element, sample)
   reg = sample.match(element) if defined?(sample.match) && element.respond_to?(:match)
   return true if reg || element == sample || element.class == sample
+
+  truthy_numeric(element, sample)
+end
+
+def truthy_numeric(element, sample)
+  return true if sample == Numeric && element.is_a?(Numeric)
 end
 
 def truthy_no_typeblock(element, no_type, no_block)
   return true if element && no_type && no_block
 end
 
-p %w[ant bear cat].my_all? { |word| word.length >= 3 } 
+p [1, 2i, 3.14].my_all?(Numeric)
 
 # rubocop:enable Metrics/ModuleLength
