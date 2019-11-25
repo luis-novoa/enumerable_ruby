@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# rubocop:disable Metrics/ModuleLength
+
 module Enumerable
   def my_each
     instance = self
@@ -176,3 +178,5 @@ end
 def truthy_no_typeblock(element, no_type, no_block)
   return true if element && no_type && no_block
 end
+
+# rubocop:enable Metrics/ModuleLength
