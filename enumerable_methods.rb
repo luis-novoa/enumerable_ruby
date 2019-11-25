@@ -48,11 +48,11 @@ module Enumerable
     instance.my_each do |e|
       is_true = truthy(e, type)
       is_true ||= truthy_no_typeblock(e, type.nil?, !block_given?)
-      return false unless is_true
-
       if block_given?
         return false unless yield(e)
+        is_true ||= true
       end
+      return false unless is_true
     end
     true
   end
@@ -178,5 +178,7 @@ end
 def truthy_no_typeblock(element, no_type, no_block)
   return true if element && no_type && no_block
 end
+
+p %w[ant bear cat].my_all? { |word| word.length >= 3 } 
 
 # rubocop:enable Metrics/ModuleLength
