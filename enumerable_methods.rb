@@ -89,10 +89,10 @@ module Enumerable
     instance = instance.clone
     puts 'warning: given block not used' if block_given? && !type.nil?
     instance.my_each do |e|
-      reg = type.match(e) if defined?(type.match) && e.respond_to?(:match)
-      return false if reg || e == type || e.class == type
+      is_true = truthy(e, type)
+      is_true ||= truthy_no_typeblock(e, type.nil?, !block_given?)
+      return false if is_true
       return false if block_given? && yield(e)
-      return false if e && !block_given? && type.nil?
     end
     true
   end
@@ -190,11 +190,11 @@ module Enumerable
   end
 end
 
-false_block = proc { |num| num > 10 };
-array = [1,2,5,4,7]
-p array.my_none?(&false_block)  == array.none?(&false_block)
-p array.my_none? == array.none?
-p array.my_none?(Array)  == array.none?(Array)
-array = %w[dog door rod blade]
-p array.my_none?(/c/) == array.none?(/c/)
-p array.my_none?(5) == array.none?(5)
+def truthy(element, sample)
+  reg = sample.match(element) if defined?(sample.match) && element.respond_to?(:match)
+  return true if reg || element == sample || element.class == sample
+end
+
+def truthy_no_typeblock(element, no_type, no_block)
+  return true if element && no_type && no_block
+end
