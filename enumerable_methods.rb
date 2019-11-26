@@ -70,7 +70,7 @@ module Enumerable
     puts 'warning: given block not used' if block_given? && !type.empty?
     !instance.my_none?(type)
   end
-  
+
   def my_none?(type = [])
     instance = self
     instance = instance.clone
@@ -126,8 +126,7 @@ module Enumerable
       :** => proc { |a, b| a**b }
     }
     instance = self
-    instance = instance.clone
-    instance = instance.to_a if !instance.respond_to?(:shift)
+    instance = instance.clone.to_a
     if sym.nil? && initial.respond_to?(:to_sym)
       sym = initial.to_sym
       initial = nil
@@ -192,7 +191,5 @@ end
 def truthy_no_typeblock(element, no_type, no_block)
   return true if element && no_type && no_block
 end
-
-p (5..10).my_inject { |sum, n| sum + n }
 
 # rubocop:enable Metrics/ModuleLength
