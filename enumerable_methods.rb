@@ -6,7 +6,7 @@ module Enumerable
   def my_each
     instance = self
     instance = instance.clone
-    return instance.to_enum unless block_given?
+    return instance.to_enum if !block_given? || instance.length.zero?
 
     i = 0
     loop do
@@ -41,10 +41,16 @@ module Enumerable
     result
   end
 
+  def empty_array?(length)
+    true if length.zero?
+  end
+
   def my_all?(type = nil)
     instance = self
     instance = instance.clone
     puts 'warning: given block not used' if block_given? && !type.nil?
+    empty_array?(instance.length)
+
     instance.my_each do |e|
       is_true = truthy(e, type)
       is_true ||= truthy_no_typeblock(e, type.nil?, !block_given?)
@@ -186,6 +192,6 @@ def truthy_no_typeblock(element, no_type, no_block)
   return true if element && no_type && no_block
 end
 
-p [1, 2i, 3.14].my_all?(Numeric)
+p [].my_all?
 
 # rubocop:enable Metrics/ModuleLength
