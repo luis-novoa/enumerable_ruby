@@ -48,7 +48,7 @@ module Enumerable
   def my_all?(type = [])
     instance = self
     instance = instance.clone
-    empty = type.empty? if type.respond_to?(:empty?)
+    empty = type_changer(type)
     puts 'warning: given block not used' if block_given? && !empty
     empty_array?(instance.length)
 
@@ -76,7 +76,7 @@ module Enumerable
   def my_none?(type = [])
     instance = self
     instance = instance.clone
-    empty = type.empty? if type.respond_to?(:empty?)
+    empty = type_changer(type)
     puts 'warning: given block not used' if block_given? && !empty
     instance.my_each do |e|
       is_true = truthy_no_typeblock(e, empty, !block_given?)
@@ -195,6 +195,8 @@ def truthy_no_typeblock(element, no_type, no_block)
   return true if element && no_type && no_block
 end
 
-p %w{ant bear cat}.my_none?(/d/)
+def type_changer(type)
+  return type.empty? if type.respond_to?(:empty?)
+end
 
 # rubocop:enable Metrics/ModuleLength
