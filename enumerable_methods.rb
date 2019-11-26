@@ -48,12 +48,13 @@ module Enumerable
   def my_all?(type = [])
     instance = self
     instance = instance.clone
-    puts 'warning: given block not used' if block_given? && !type.empty?
+    empty = type.empty? if type.respond_to?(:empty?)
+    puts 'warning: given block not used' if block_given? && !empty
     empty_array?(instance.length)
 
     instance.my_each do |e|
       is_true = truthy(e, type)
-      is_true ||= truthy_no_typeblock(e, type.empty?, !block_given?)
+      is_true ||= truthy_no_typeblock(e, empty, !block_given?)
       if block_given?
         return false unless yield(e)
 
@@ -67,16 +68,18 @@ module Enumerable
   def my_any?(type = [])
     instance = self
     instance = instance.clone
-    puts 'warning: given block not used' if block_given? && !type.empty?
+    empty = type.empty? if type.respond_to?(:empty?)
+    puts 'warning: given block not used' if block_given? && !empty
     !instance.my_none?(type)
   end
 
   def my_none?(type = [])
     instance = self
     instance = instance.clone
-    puts 'warning: given block not used' if block_given? && !type.empty?
+    empty = type.empty? if type.respond_to?(:empty?)
+    puts 'warning: given block not used' if block_given? && !empty
     instance.my_each do |e|
-      is_true = truthy_no_typeblock(e, type.empty?, !block_given?)
+      is_true = truthy_no_typeblock(e, empty, !block_given?)
       is_true ||= truthy(e, type)
       return false if is_true
       return false if block_given? && yield(e)
@@ -191,5 +194,7 @@ end
 def truthy_no_typeblock(element, no_type, no_block)
   return true if element && no_type && no_block
 end
+
+p %w{ant bear cat}.my_none?(/d/)
 
 # rubocop:enable Metrics/ModuleLength
