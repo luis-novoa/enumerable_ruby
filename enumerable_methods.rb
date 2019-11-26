@@ -45,15 +45,15 @@ module Enumerable
     true if length.zero?
   end
 
-  def my_all?(type = nil)
+  def my_all?(type = [])
     instance = self
     instance = instance.clone
-    puts 'warning: given block not used' if block_given? && !type.nil?
+    puts 'warning: given block not used' if block_given? && !type.empty?
     empty_array?(instance.length)
 
     instance.my_each do |e|
       is_true = truthy(e, type)
-      is_true ||= truthy_no_typeblock(e, type.nil?, !block_given?)
+      is_true ||= truthy_no_typeblock(e, type.empty?, !block_given?)
       if block_given?
         return false unless yield(e)
 
@@ -64,20 +64,20 @@ module Enumerable
     true
   end
 
-  def my_any?(type = nil)
+  def my_any?(type = [])
     instance = self
     instance = instance.clone
-    puts 'warning: given block not used' if block_given? && !type.nil?
+    puts 'warning: given block not used' if block_given? && !type.empty?
     !instance.my_none?(type)
   end
-
-  def my_none?(type = nil)
+  
+  def my_none?(type = [])
     instance = self
     instance = instance.clone
-    puts 'warning: given block not used' if block_given? && !type.nil?
+    puts 'warning: given block not used' if block_given? && !type.empty?
     instance.my_each do |e|
-      is_true = truthy(e, type)
-      is_true ||= truthy_no_typeblock(e, type.nil?, !block_given?)
+      is_true = truthy_no_typeblock(e, type.empty?, !block_given?)
+      is_true ||= truthy(e, type)
       return false if is_true
       return false if block_given? && yield(e)
     end
@@ -127,6 +127,7 @@ module Enumerable
     }
     instance = self
     instance = instance.clone
+    instance = instance.to_a if !instance.respond_to?(:shift)
     if sym.nil? && initial.respond_to?(:to_sym)
       sym = initial.to_sym
       initial = nil
@@ -192,6 +193,6 @@ def truthy_no_typeblock(element, no_type, no_block)
   return true if element && no_type && no_block
 end
 
-p [].my_all?
+p (5..10).my_inject { |sum, n| sum + n }
 
 # rubocop:enable Metrics/ModuleLength
