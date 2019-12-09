@@ -33,15 +33,16 @@ RSpec.describe do
   end
 
   describe '#my_any?' do
-  let(:arr) {[1, 2, 3, 4]}
-  it 'returns false because there\'s no string' do
-    expect(arr.my_all?(String)).to eq(false)
+    let(:arr) {[1, 2, 3, 4]}
+    it 'returns false because there\'s no string' do
+      expect(arr.my_any?(String)).to eq(false)
+    end
   end
 
   describe '#my_none?' do
-  let(:arr) {[1, 2, 3, 4]}
-  it 'returns true because there\'s no arrays' do
-    expect(arr.my_all?(Array)).to eq(true)
+    let(:arr) {[1, 2, 3, 4]}
+    it 'returns true because there\'s no arrays' do
+      expect(arr.my_none?(Array)).to eq(true)
+    end
   end
-end
 end
