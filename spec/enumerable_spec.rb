@@ -31,4 +31,11 @@ RSpec.describe do
       expect(arr.my_all?(Integer)).to eq(true)
     end
   end
+
+  describe '#my_any?' do
+  let(:arr) {[1, 2, 3, 4]}
+  it 'returns false because there\'s no string' do
+    expect(arr.my_all?(String)).to eq(false)
+  end
+end
 end
