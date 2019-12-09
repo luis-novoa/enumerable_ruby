@@ -45,4 +45,11 @@ RSpec.describe do
       expect(arr.my_none?(Array)).to eq(true)
     end
   end
+
+  describe '#my_inject' do
+    let(:arr) {[1, 2, 3, 4]}
+    it 'returns the sum of the array' do
+      expect(arr.my_inject(:+)).to eq(10)
+    end
+  end
 end
