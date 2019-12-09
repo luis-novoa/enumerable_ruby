@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-require File.expand_path('../enumerable_methods', __dir__)
+require_relative '../enumerable_methods'
 
 RSpec.describe do
+  let(:array) { [1, 2, 3, 4] }
+  let(:new_array) { [] }
   describe '#my_each' do
-    let(:array) { [1, 2, 3, 4] }
-    let(:new_array) { [] }
     it 'applies adds one to every element' do
       array.my_each do |e|
         e += 1
@@ -16,8 +16,8 @@ RSpec.describe do
   end
 
   describe '#my_select' do
-    let(:arr) { [1, 2, 3, 4] }
-    let(:new_arr) { [] }
+    # let(:arr) { [1, 2, 3, 4] }
+    # let(:new_arr) { [] }
     it 'returns all numbers bigger than two' do
       new_arr = arr.my_select { |n| n > 2 }
       expect(new_arr).to eq([3, 4])
@@ -29,28 +29,28 @@ RSpec.describe do
   end
 
   describe '#my_all?' do
-    let(:arr) { [1, 2, 3, 4] }
+    # let(:arr) { [1, 2, 3, 4] }
     it 'returns true for the array of Integers' do
       expect(arr.my_all?(Integer)).to eq(true)
     end
   end
 
   describe '#my_any?' do
-    let(:arr) { [1, 2, 3, 4] }
+    # let(:arr) { [1, 2, 3, 4] }
     it 'returns false because there\'s no string' do
       expect(arr.my_any?(String)).to eq(false)
     end
   end
 
   describe '#my_none?' do
-    let(:arr) { [1, 2, 3, 4] }
+    # let(:arr) { [1, 2, 3, 4] }
     it 'returns true because there\'s no arrays' do
       expect(arr.my_none?(Array)).to eq(true)
     end
   end
 
   describe '#my_inject' do
-    let(:arr) { [1, 2, 3, 4] }
+    # let(:arr) { [1, 2, 3, 4] }
     it 'returns the sum of the array' do
       expect(arr.my_inject(:+)).to eq(10)
     end
