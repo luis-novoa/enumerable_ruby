@@ -45,7 +45,7 @@ RSpec.describe do
       end
 
       it 'returns error if more than one argument is given' do
-        expect{ array.my_all?(1, 2) }.to raise_error(ArgumentError)
+        expect { array.my_all?(1, 2) }.to raise_error(ArgumentError)
       end
     end
   end
@@ -57,7 +57,7 @@ RSpec.describe do
       end
 
       it 'returns error if more than one argument is given' do
-        expect{ array.my_any?(1, 2) }.to raise_error(ArgumentError)
+        expect { array.my_any?(1, 2) }.to raise_error(ArgumentError)
       end
     end
   end
@@ -69,20 +69,19 @@ RSpec.describe do
       end
 
       it 'returns error if more than one argument is given' do
-        expect{ array.my_none?(1, 2) }.to raise_error(ArgumentError)
+        expect { array.my_none?(1, 2) }.to raise_error(ArgumentError)
       end
     end
   end
 
   describe '#my_inject' do
-
     include_context 'global_arrays' do
       it 'returns the sum of the array' do
         expect(array.my_inject(:+)).to eq(10)
       end
 
       it 'raises an error when no block is given' do
-        expect{ array.my_inject }.to raise_error(LocalJumpError)
+        expect { array.my_inject }.to raise_error(LocalJumpError)
       end
     end
   end
