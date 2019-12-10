@@ -207,6 +207,4 @@ def type_changer(type)
   return type.empty? if type.respond_to?(:empty?)
 end
 
-# var = [1, 2, 3]
-# p var.my_inject
 # rubocop:enable Metrics/ModuleLength
