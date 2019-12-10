@@ -120,6 +120,8 @@ module Enumerable
     result
   end
 
+  # rubocop:disable Style/GuardClause
+
   def my_inject(initial = nil, sym = nil)
     operations = {
       :+ => proc { |a, b| a + b },
@@ -137,11 +139,20 @@ module Enumerable
     total = initial
     total = instance.shift if initial.nil?
     instance.my_each do |e|
-      total = operations[sym].call(total, e) unless sym.nil?
-      total = yield(total, e) if block_given?
+      unless sym.nil?
+        total = operations[sym].call(total, e)
+        next
+      end
+      if block_given?
+        total = yield(total, e)
+      else
+        raise LocalJumpError
+      end
     end
     total
   end
+
+  # rubocop:enable Style/GuardClause
 
   def multiply_els
     instance = self
