@@ -17,6 +17,10 @@ RSpec.describe do
         end
         expect(new_array).to eq([2, 3, 4, 5])
       end
+
+       it 'returns en enumerable when no block is passed' do
+        expect(array.my_each.class).to eq(Enumerator)
+      end
     end
   end
 
@@ -59,9 +63,14 @@ RSpec.describe do
   end
 
   describe '#my_inject' do
+
     include_context 'global_arrays' do
       it 'returns the sum of the array' do
         expect(array.my_inject(:+)).to eq(10)
+      end
+
+      it 'raises an error when no block is given' do
+        expect(array.my_inject).to raise_error
       end
     end
   end
