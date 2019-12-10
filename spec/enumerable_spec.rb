@@ -3,56 +3,66 @@
 require_relative '../enumerable_methods'
 
 RSpec.describe do
-  let(:array) { [1, 2, 3, 4] }
-  let(:new_array) { [] }
+  shared_context 'global_arrays' do
+    let(:array) { [1, 2, 3, 4] }
+    let(:new_array) { [] }
+  end
+
   describe '#my_each' do
-    it 'applies adds one to every element' do
-      array.my_each do |e|
-        e += 1
-        new_array.push(e)
+    include_context 'global_arrays' do
+      it 'applies adds one to every element' do
+        array.my_each do |e|
+          e += 1
+          new_array.push(e)
+        end
+        expect(new_array).to eq([2, 3, 4, 5])
       end
-      expect(new_array).to eq([2, 3, 4, 5])
     end
   end
 
   describe '#my_select' do
-    # let(:arr) { [1, 2, 3, 4] }
-    # let(:new_arr) { [] }
-    it 'returns all numbers bigger than two' do
-      new_arr = arr.my_select { |n| n > 2 }
-      expect(new_arr).to eq([3, 4])
-    end
-    it 'returns en enumerable when no block is passed' do
-      new_arr = arr.my_select
-      expect(new_arr.class).to eq(Enumerator)
+    include_context 'global_arrays' do
+      it 'returns all numbers bigger than two' do
+        new_array = array.my_select { |n| n > 2 }
+        expect(new_array).to eq([3, 4])
+      end
+
+      it 'returns en enumerable when no block is passed' do
+        new_array = array.my_select
+        expect(new_array.class).to eq(Enumerator)
+      end
     end
   end
 
   describe '#my_all?' do
-    # let(:arr) { [1, 2, 3, 4] }
-    it 'returns true for the array of Integers' do
-      expect(arr.my_all?(Integer)).to eq(true)
+    include_context 'global_arrays' do
+      it 'returns true for the array of Integers' do
+        expect(array.my_all?(Integer)).to eq(true)
+      end
     end
   end
 
   describe '#my_any?' do
-    # let(:arr) { [1, 2, 3, 4] }
-    it 'returns false because there\'s no string' do
-      expect(arr.my_any?(String)).to eq(false)
+    include_context 'global_arrays' do
+      it 'returns false because there\'s no string' do
+        expect(array.my_any?(String)).to eq(false)
+      end
     end
   end
 
   describe '#my_none?' do
-    # let(:arr) { [1, 2, 3, 4] }
-    it 'returns true because there\'s no arrays' do
-      expect(arr.my_none?(Array)).to eq(true)
+    include_context 'global_arrays' do
+      it 'returns true because there\'s no arrays' do
+        expect(array.my_none?(Array)).to eq(true)
+      end
     end
   end
 
   describe '#my_inject' do
-    # let(:arr) { [1, 2, 3, 4] }
-    it 'returns the sum of the array' do
-      expect(arr.my_inject(:+)).to eq(10)
+    include_context 'global_arrays' do
+      it 'returns the sum of the array' do
+        expect(array.my_inject(:+)).to eq(10)
+      end
     end
   end
 end
