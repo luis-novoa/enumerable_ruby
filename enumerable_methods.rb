@@ -137,8 +137,16 @@ module Enumerable
     total = initial
     total = instance.shift if initial.nil?
     instance.my_each do |e|
-      total = operations[sym].call(total, e) unless sym.nil?
-      total = yield(total, e) if block_given?
+      unless sym.nil?
+        total = operations[sym].call(total, e)
+        next
+      end
+      if block_given?
+        total = yield(total, e)
+      else
+        raise LocalJumpError
+      end
+      # total = yield(total, e) if block_given?
     end
     total
   end
@@ -199,4 +207,6 @@ def type_changer(type)
   return type.empty? if type.respond_to?(:empty?)
 end
 
+# var = [1, 2, 3]
+# p var.my_inject
 # rubocop:enable Metrics/ModuleLength

@@ -18,7 +18,7 @@ RSpec.describe do
         expect(new_array).to eq([2, 3, 4, 5])
       end
 
-       it 'returns en enumerable when no block is passed' do
+      it 'returns en enumerable when no block is passed' do
         expect(array.my_each.class).to eq(Enumerator)
       end
     end
@@ -70,7 +70,7 @@ RSpec.describe do
       end
 
       it 'raises an error when no block is given' do
-        expect(array.my_inject).to raise_error
+        expect{ array.my_inject }.to raise_error(LocalJumpError)
       end
     end
   end
