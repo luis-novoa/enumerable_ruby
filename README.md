@@ -1,5 +1,5 @@
 # Enumerable-Ruby
-In this project, I recreate several methods of the "Enumerable" package for Ruby. This is a project proposed by [The Odin Project](https://www.theodinproject.com/courses/ruby-programming/lessons/advanced-building-blocks) and is part of the [Microverse curriculum](https://www.microverse.org/#world-class-curriculum).
+In this project, I recreate several methods of the "Enumerable" package for Ruby. [Check out the main file!](/enumerable_methods.rb) This is a project proposed by [The Odin Project](https://www.theodinproject.com/courses/ruby-programming/lessons/advanced-building-blocks) and is part of the [Microverse curriculum](https://www.microverse.org/#world-class-curriculum).
 
 # Getting a Copy and Contributing
 This project is open for anyone who wants to clone it and create their version. If you just want the files and don't want to make further changes, follow the steps below to get a copy in your computer:
@@ -36,7 +36,24 @@ If you have contributions to make, send me a message telling me about your ideas
 - [VSCode](https://code.visualstudio.com/) to edit the code.
 - [Stickler CI](https://stickler-ci.com) to ensure a standard on code style and as additional check for errors.
 
-# Authors
+## Author
 
-- [Luis Novoa](https://github.com/luis-novoa)
+👤 **Luis Novoa**
+
+- GitHub: [luis-novoa](https://github.com/luis-novoa)
+- Twitter: [@LuisMatteNovoa](https://twitter.com/LuisMatteNovoa)
+- Linkedin: [Luis Novoa](https://www.linkedin.com/in/luismattenovoa/)
+- Email: [luis.matte.novoa@gmail.com](mailto:luis.matte.novoa@gmail.com])
+
+## 🤝 Contributing
+
+Contributions and feature requests are welcome!
+
+## Show your support
+
+Give a ⭐️ if you like this project!
+
+## 📝 License
+
+This project is [MIT](./LICENSE) licensed.
 
